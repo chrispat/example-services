@@ -23,4 +23,4 @@ jobs:
     - name: Run a multi-line script
       run: |
         echo "SELECT NOW();" > test.sql
-        mysql -u tester -p password -h 127.0.0.1 -p ${{ job.services.mariadb.ports[3306] }} < test.sql
+        mysql -u tester -p password --host 127.0.0.1 --port ${{ job.services.mariadb.ports[3306] }} < test.sql
