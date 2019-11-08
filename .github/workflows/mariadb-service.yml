@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.4
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: tester
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: testdb
+        ports:
+          - 3306/tcp
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Run a multi-line script
+      run: |
+        echo "SELECT NOW();" > test.sql
+        mysql -u root -p password --host 127.0.0.1 --port ${{ job.services.mariadb.ports[3306] }} --database testdb < test.sql
